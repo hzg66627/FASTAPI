@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学生管理系统</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        h1 { text-align: center; }
+        .container { width: 80%; margin: auto; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; }
+        input, button { padding: 10px; width: 100%; }
+        button { cursor: pointer; }
+        .student-list, .group-list { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>学生管理系统</h1>
+
+        <h2>添加学生</h2>
+        <div class="form-group">
+            <label for="student-name">学生姓名</label>
+            <input type="text" id="student-name" placeholder="输入学生姓名">
+            <button onclick="addStudent()">添加学生</button>
+        </div>
+
+        <h2>学生列表</h2>
+        <div class="student-list" id="student-list"></div>
+
+        <h2>添加组</h2>
+        <div class="form-group">
+            <label for="group-name">组名称</label>
+            <input type="text" id="group-name" placeholder="输入组名称">
+            <button onclick="addGroup()">添加组</button>
+        </div>
+
+        <h2>组列表</h2>
+        <div class="group-list" id="group-list"></div>
+    </div>
+
+    <script>
+        const apiUrl = 'http://localhost:8000';
+
+        async function fetchStudents() {
+            const response = await fetch(`${apiUrl}/students/`);
+            const students = await response.json();
+            const studentList = document.getElementById('student-list');
+            studentList.innerHTML = students.map(student => `<div>${student.name}</div>`).join('');
+        }
+
+        async function fetchGroups() {
+            const response = await fetch(`${apiUrl}/groups/`);
+            const groups = await response.json();
+            const groupList = document.getElementById('group-list');
+            groupList.innerHTML = groups.map(group => `<div>${group.name}</div>`).join('');
+        }
+
+        async function addStudent() {
+            const name = document.getElementById('student-name').value;
+            await fetch(`${apiUrl}/students/`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name })
+            });
+            document.getElementById('student-name').value = '';
+            fetchStudents();
+        }
+
+        async function addGroup() {
+            const name = document.getElementById('group-name').value;
+            await fetch(`${apiUrl}/groups/`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name })
+            });
+            document.getElementById('group-name').value = '';
+            fetchGroups();
+        }
+
+        // 初始加载学生和组
+        fetchStudents();
+        fetchGroups();
+    </script>
+</body>
+</html>

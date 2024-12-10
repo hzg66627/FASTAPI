@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: database_name
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    env_file:
+      - .env
+
+volumes:
+  postgres_data:
