@@ -5,7 +5,7 @@ TORTOISE_ORM = {
             #'engine': 'tortoise.backends.asyncpg',
             'engine': 'tortoise.backends.mysql',  # MySQL or Mariadb
             'credentials': {
-                'host': 'db',
+                'host': '127.0.0.1',#db
                 'port': '3306',
                 'user': 'root',
                 'password': 'Liu94326',
